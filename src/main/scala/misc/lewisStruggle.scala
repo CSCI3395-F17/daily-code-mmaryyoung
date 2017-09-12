@@ -1,10 +1,12 @@
 
+package misc
+
 case class TempData(day: Int, doy: Int, month: Int, year: Int, precip: Double, tave: Double, tmax: Double, tmin: Double)
 
 object tempAnalysis{
     def main(args: Array[String]): Unit ={
 
-val source = io.Source.fromFile("/users/jyang/SanAntonioTemps.csv")
+val source = scala.io.Source.fromFile("/users/jyang/SanAntonioTemps.csv")
 val lines = source.getLines.drop(2)
 
 val tempData = lines.map{line => 
