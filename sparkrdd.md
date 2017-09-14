@@ -13,4 +13,5 @@ Individial Problems:
   5. 34.8C
   6. -0.027054099777969617
   7. Green: Buenos Aires, Blue: Oslo, Orange: Toronto: Pink: Orlando, Yellow: A city in Brazil LAGOA DA CARNAUBA
+  Temperature is in tenths of C and Time is in days of the year
   ![plot](./prob7.png)
