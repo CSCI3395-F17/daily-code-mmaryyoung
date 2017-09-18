@@ -1,17 +1,17 @@
 # 380,000+ Lyrics from MetroLyrics
 
-*[Link](https://www.kaggle.com/gyani95/380000-lyrics-from-metrolyrics)
+* [Link](https://www.kaggle.com/gyani95/380000-lyrics-from-metrolyrics)
 
-*Description:  
+* Description:  
 This dataset contains information for over 380,000 songs. Information includes song name, year of release, artist name, genre and most importantly, lyrics. The dataset is organized through the  artist/year/song structure. Genre information is indicated by a text file inside each musician folder. Therefore the implied drawback for this dataset is that when an artist performs different music in different genres, such variety will not be shown. 
 
-*Questions of Interest:  
+* Questions of Interest:  
 	1. What are the most frequent words in each genre?
 	2. What is the repetitiveness within songs for each genre? 
 	3. Are there any strong genre indicating words/phrases?
 	4. Is it possible to predict genre based on the lyrics? If so, how good is the accuracy?
 
-*Reasons for the Interest:  
+* Reasons for the Interest:  
 I work on music genre classification for senior thesis. However we only take the audio files instead of the lyrics into account when analyzing songs. Part of the reason is that I believe when humans determine the genre of a song, we mainly rely on the melody, rhythm, timbre and other musical features rather than lyrics. Lyrics, although has its own limitations, can also aid the genre identification. I hope to find out lyrics' potential in this task.
 
 ---
