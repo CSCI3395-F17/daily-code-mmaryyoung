@@ -85,13 +85,13 @@
       println("Individual 1:")
       val highs1 = data1.filter(tup => tup._2._2.obsType == "TMAX").map(tup => tup._2._2.obsValue.toDouble)
       val std1 = highs1.stdev
-      println("1.A) under 35 stdev: " + std1) // 83.37095188830301
+      println("1.A) under 35 stdev: " + std1*0.1) // 8.337095188830301
       val highs2 = data2.filter(tup => tup._2._2.obsType == "TMAX").map(tup => tup._2._2.obsValue.toDouble)
       val std2 = highs2.stdev
-      println("1.A) between 35 and 42 stdev: " + std2) // 107.90696624500666
+      println("1.A) between 35 and 42 stdev: " + std2*0.1) // 10.790696624500666
       val highs3 = data3.filter(tup => tup._2._2.obsType == "TMAX").map(tup => tup._2._2.obsValue.toDouble)
       val std3 = highs3.stdev
-      println("1.A) above 42 stdev: " + std3) // 129.03498001797848
+      println("1.A) above 42 stdev: " + std3*0.1) // 12.903498001797848
       
       
       
@@ -101,19 +101,19 @@
       //tmaxnmin: ((ID, Date), obsValue)
       val avg1 = tmax1.join(tmin1).mapValues(tup => (tup._1 + tup._2)/2).values
       val stdavg1 = avg1.stdev
-      println("1.B) under 35 avg stdev: " + stdavg1*0.1) // 80.13252578458058
+      println("1.B) under 35 avg stdev: " + stdavg1*0.1) // 8.013252578458058
       val tmax2 = data2.filter(tup => tup._2._2.obsType == "TMAX").map(tup => (tup._1, tup._2._2.Date)->tup._2._2.obsValue.toDouble)
       val tmin2 = data2.filter(tup => tup._2._2.obsType == "TMIN").map(tup => (tup._1, tup._2._2.Date)->tup._2._2.obsValue.toDouble)
       //tmaxnmin: ((ID, Date), obsValue)
       val avg2 = tmax2.join(tmin2).mapValues(tup => (tup._1 + tup._2)/2).values
       val stdavg2 = avg2.stdev
-      println("1.B) between 35 and 42 avg stdev: " + stdavg2*0.1) // 99.08423665720707
+      println("1.B) between 35 and 42 avg stdev: " + stdavg2*0.1) // 9.908423665720707
       val tmax3 = data3.filter(tup => tup._2._2.obsType == "TMAX").map(tup => (tup._1, tup._2._2.Date)->tup._2._2.obsValue.toDouble)
       val tmin3 = data3.filter(tup => tup._2._2.obsType == "TMIN").map(tup => (tup._1, tup._2._2.Date)->tup._2._2.obsValue.toDouble)
       //tmaxnmin: ((ID, Date), obsValue)
       val avg3 = tmax3.join(tmin3).mapValues(tup => (tup._1 + tup._2)/2).values
       val stdavg3 = avg3.stdev
-      println("1.B) above 42 avg stdev: " + stdavg3*0.1) // 117.18242126409598
+      println("1.B) above 42 avg stdev: " + stdavg3*0.1) // 11.718242126409598
       val bins = (-30.0 to 100.0 by 2.0).toArray
       val hist1 = highs1.map(_*0.1).histogram(bins, true)
       val plot1 = Plot.histogramPlot(bins, hist1, BlueARGB, false, "under 35", "Temperature(C*10)", "Occurence") 
@@ -164,7 +164,7 @@
    
    
    def individual3(){
-     /*val lines1897 = sc.textFile("/users/mlewis/CSCI3395-F17/data/ghcn-daily/1897.csv")
+     val lines1897 = sc.textFile("/users/mlewis/CSCI3395-F17/data/ghcn-daily/1897.csv")
      val m1897Cases = lines1897.map{s =>
   	    val p = s.split(",")
         yearData(p(0),p(1),p(2),p(3),(4))
@@ -195,7 +195,7 @@
      //val sharedAvg2016 = intersec.values.map(_._2).sum()/intersec.count()
      println("shared 1897 avg tmp: " + sharedAvg1897) // 10.590595799285971
      println("shared 2016 avg tmp: " + sharedAvg2016) // 12.086669060116423
- */
+ 
      //C
      val years = (1897 to 2017 by 10).toArray.map(_.toString())
      years(years.length - 1) = "2016"
@@ -205,6 +205,7 @@
      val plot1 = Plot.scatterPlot(bins, avgYears1.toArray.map(_*1.0) , "3c", "year", "average temperature in C", 10, BlackARGB)
      FXRenderer(plot1)
      
+     //D
      val avgYears2 = new Array[Double](years.length)
      val interm = new Array[RDD[(String, Double)]](years.length)
      val stations2 = new Array[RDD[String]](years.length)
