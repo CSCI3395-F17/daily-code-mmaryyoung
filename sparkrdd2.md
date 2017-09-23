@@ -12,7 +12,7 @@ Individial Problems:
     * a) <35: 8.34C , 35<x<42: 10.79C , 42<x: 12.90C
     * b) <35: 8.01C , 35<x<42: 9.91C , 42<x: 11.72C
     * c) ![<35](./plots/under35)
-    ![35-42](./plot/35to42)
+    * d) ![35-42](./plot/35to42)
     ![42<](./plot/above42)
   2. ![heat map](./plot/heatmap)
   3. 
