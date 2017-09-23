@@ -13,12 +13,14 @@ Individial Problems:
     * b) <35: 8.01C , 35<x<42: 9.91C , 42<x: 11.72C
     * c) ![<35](./plots/under35)
 
-        ![35-42](./plot/35to42)
+![35-42](./plot/35to42)
      
-        ![42<](./plot/above42)
+![42<](./plot/above42)
   2. ![heat map](./plot/heatmap)
   3. 
-    * a) Average of 1897: 10.67 | Average of 2016: 11.69
-    * b) Average of 1897: 10.59 | Average of 2016: 12.09
+    * a) Average of 1897: 10.67C | Average of 2016: 11.69C
+    * b) Average of 1897: 10.59C | Average of 2016: 12.09C
     * c)![Average Temperature over Years 1](./plot/3c)
-    * d)![Average Temperature over Years 2](./plot/3d)     
+    * d)![Average Temperature over Years 2](./plot/3d)  
+  4. Approach A is easier to code but many new stations are built over the 119 year span. Approach B produces more sensible results. Comparison can only be used to illustrate climate change if the data is collected by the same stations. However it takes longer to code and run approach B.
+  5. I really did not find any flaw..
