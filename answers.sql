@@ -88,5 +88,21 @@ from(
 select count(distinct quizid) from quizzes;
 select 44/55;
 
-
-
+#10 courseid 1 quizid 21 avg 349.5
+select y.courseid, y.quizid, y.c/ count(*) as avg
+from(
+    select courseid, qc.quizid, count(*) as c
+    from(
+        select quizid from mc_answers
+        union all
+        select quizid from code_answers
+    ) x
+    join quiz_course_close_assoc as qc
+    on qc.quizid = x.quizid
+    group by courseid, qc.quizid) y
+join user_course_assoc as uc
+on uc.courseid = y.courseid
+group by courseid, quizid
+order by avg DESC
+limit 1
+;
