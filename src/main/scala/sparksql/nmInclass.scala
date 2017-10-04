@@ -34,10 +34,9 @@ object nmInclass{
     val datac = spark.read.schema(schema).option("header", true).option("delimiter", "\t").csv("/data/BigData/bls/la/la.data.concatenatedStateFiles")
     val dataArea = spark.read.schema(schemaArea).option("header", true).option("delimiter", "\t").csv("/data/BigData/bls/la/la.area")
 
-/*
+
     val data = spark.read.schema(schema).option("header", true).option("delimiter", "\t").csv("/data/BigData/bls/la/la.data.38.NewMexico")
     val data2 = spark.read.schema(schema2).option("header", true).option("delimiter", "\t").csv("/data/BigData/bls/la/la.series")
-    
     
     //1 264
     println(data.select('seriesID).distinct().count())
@@ -46,7 +45,6 @@ object nmInclass{
 
     //3 7304
     println(data2.filter('areaTypeCode === "G").dropDuplicates("seriesID").count())
-    
     //4
     //a
     data.filter(substring('seriesID, 19, 2) === "03").groupBy('period).agg(avg('value)).orderBy('period).show()
@@ -62,7 +60,6 @@ object nmInclass{
     val num1 = joined1.select('labor*'unemploy as "weighted").agg(sum("weighted")).first.getDouble(0)
     val num2 = joined1.agg(sum("labor")).first.getDouble(0)
     println(num1)
-    
     //2 Rio Grande City and Starr County, both in Feb, 1990 unemploy 54.1
     val texas2 = datac.filter(substring('seriesID, 6, 2) === "48")
     val labor2 = texas2.filter(substring('seriesID, 19, 2) === "06" && 'value > 10000).select(substring('seriesID, 4, 15) as "areaCode").distinct()
@@ -77,7 +74,7 @@ object nmInclass{
     val highUnemploy3 = unemploy3.join(labor3, unemploy3.col("areaCode1") === labor3.col("areaCode")).orderBy(desc("unemploy")).limit(2)
     highUnemploy3.show()
     dataArea.join(highUnemploy3, dataArea.col("areaCode") === highUnemploy3.col("areaCode1")).select('areaText, 'year, 'period).show()
-    */
+    
     //4 maine
     datac.select('seriesID).groupBy(substring('seriesID, 6, 2) as "state").count().orderBy(desc("count")).show()
     spark.stop()
