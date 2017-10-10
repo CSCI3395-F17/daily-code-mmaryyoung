@@ -140,41 +140,47 @@ println("1.)")
         Seq((hist1990F:PlotDoubleSeries) -> GreenARGB,(hist1991F:PlotDoubleSeries) -> RedARGB, 
             (hist20012F:PlotDoubleSeries) -> GreenARGB,(hist200112F:PlotDoubleSeries) -> RedARGB, 
             (hist2007F:PlotDoubleSeries) -> GreenARGB,(hist2009F:PlotDoubleSeries) -> RedARGB)), 
-false, false, "Histogram Grid", "Values", "Counts")
+false, false, "Recession Histogram", "Unemployment Rate", "Sample Count")
     FXRenderer(gridPlot, 3000, 900)
-/*
-println("2.)")
-println("a.)")
-//0.16672925713741318
-//It means the democratic votes and unemployment have a positive correlation with each other, but not very strong or indicative
 
-val counties = areaData.filter('area_type_code === "F").select('area_code, 'area_text)
-val employmentNov = statesRate.filter('year === 2016 && 'period === "M11").join(counties, 'series_id.contains('area_code)).select('area_code as "ac1", 'value)
-//electResults.show()
-val votesNov = electResults.join(counties, ('area_text.contains('county_name))&&('area_text).contains('state_abbr)).select('area_code as "ac2", 'votes_dem/'total_votes as "dem_vote_per", 'total_votes as "population")
-val employXvotes = votesNov.join(employmentNov, 'ac1 === 'ac2)
-val corr = employXvotes.stat.corr("value", "dem_vote_per")
+    println("2.)")
+    println("a.)")
+    //0.16672925713741318
+    //It means the democratic votes and unemployment have a positive correlation with each other, but not very strong or indicative
+ /*   
+    val counties = areaData.filter('area_type_code === "F").select('area_code, 'area_text)
+    val employmentNov = statesRate.filter('year === 2016 && 'period === "M11").join(counties, 'series_id.contains('area_code)).select('area_code as "ac1", 'value)
+    //electResults.show()
+    val votesNov = electResults.join(counties, ('area_text.contains('county_name))&&('area_text).contains('state_abbr)).select('area_code as "ac2", 'votes_dem/'total_votes as "dem_vote_per", 'total_votes as "population", 'area_text as "area_text1")
+    val employXvotes = votesNov.join(employmentNov, 'ac1 === 'ac2)
+    val corr = employXvotes.stat.corr("value", "dem_vote_per")
+    
+    println(corr)
+    
+    println("b.)")
+    // Counties with a lower population clearly tend to vote for democrats less, while larger counties have a higher percentage of democrat votes. There is not a strong correlation between unemployment rate and
+    // percentage of democratic votes, although it seems that most counties vote 50% or less for democrats. 
+    val dem_vote_per = employXvotes.select('dem_vote_per).rdd.map(_.getDouble(0)*100.0).collect()
+    val unemploy = employXvotes.select('value).rdd.map(_.getDouble(0)).collect()
+    val population = employXvotes.select('population).rdd.map(_.getDouble(0)).collect()
+    val cg3 = ColorGradient(1000.0 -> BlueARGB,  10000.0 -> GreenARGB, 100000.0 -> RedARGB)
+    //val democratPlot = Plot.scatterPlot(dem_vote_per,unemploy,"2016 Democratic Party","% of Democratic Votes","Unemployment",4,population.map(cg3))
+    //FXRenderer(democratPlot, 700, 500)
 
-println(corr)
+    
+   val labor = statesData.filter(substring($"series_id",19,2) === "06" && 'year === 2016 && 'period === "M11").select('series_id, 'value as "labor_force")
+   val name2Labor = labor.join(counties, 'series_id.contains('area_code)).select('area_text, 'labor_force)
+   val total_votes = electResults.select('state_abbr, 'county_name, 'total_votes)
+   val laborXvotes = name2Labor.join(total_votes, 'area_text.contains('state_abbr) && 'area_text.contains('county_name)).select('area_text, 'total_votes/'labor_force as "voter_turnout")
+   val laborXemployXvotes = employXvotes.join(laborXvotes, 'area_text1 === 'area_text)
+   val unemploy2 = laborXemployXvotes.select('value).rdd.map(_.getDouble(0)).collect()
+   val dem_vote_per2 = laborXemployXvotes.select('dem_vote_per).rdd.map(_.getDouble(0)*100.0).collect()
+   val turnout2 = laborXemployXvotes.select('voter_turnout).rdd.map(_.getDouble(0)).collect()
+   laborXvotes.show()
+   val cg4 = ColorGradient(0.5 -> BlueARGB, 0.8 -> GreenARGB, 1.4-> RedARGB)
 
-println("b.)")
-// Counties with a lower population clearly tend to vote for democrats less, while larger counties have a higher percentage of democrat votes. There is not a strong correlation between unemployment rate and
-// percentage of democratic votes, although it seems that most counties vote 50% or less for democrats. 
-val dem_vote_per = employXvotes.select('dem_vote_per).rdd.map(_.getDouble(0)*100.0).collect()
-val unemploy = employXvotes.select('value).rdd.map(_.getDouble(0)).collect()
-val population = employXvotes.select('population).rdd.map(_.getDouble(0)).collect()
-val cg3 = ColorGradient(1000.0 -> BlueARGB,  10000.0 -> GreenARGB, 100000.0 -> RedARGB)
-val democratPlot = Plot.scatterPlot(dem_vote_per,unemploy,"2016 Democratic Party","% of Democratic Votes","Unemployment",4,population.map(cg3))
-FXRenderer(democratPlot, 700, 500)
-*/
-
-
-/*
-electResults.show()
-val stateWithArea = statesRate.join(areaData.filter($"area_type_code" === "F"), $"series_id".contains($"area_code"))
-stateWithArea.show()
-val totalJoin = stateWithArea.join(electResults,$"area_text".contains(concat($"county_name",lit("County, "),$"state_abbr")))
-totalJoin.show()
+   val voterTurnoutPlot = Plot.scatterPlot(dem_vote_per2,unemploy2,"Voter Turnout Plot","% of Democratic Votes","Unemployment",4,turnout2.map(cg4))
+ //   FXRenderer(voterTurnoutPlot, 700, 500)
 */
 println("\n")
   spark.stop()
