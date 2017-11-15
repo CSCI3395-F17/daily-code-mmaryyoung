@@ -38,12 +38,9 @@ object SparkGraphX extends App {
 
   val cc = graph.connectedComponents().vertices
   val ccCount = cc.map(_._2).distinct().count()
-  cc.groupBy(_._2).mapValues(_.toSeq.length).take(5) foreach println
+  cc.groupBy(_._2).mapValues(_.toSeq.length).take(10) foreach println
   
-  /*foldLeft(0.0, 0)((alex, mary) => {
-      (alex._1 + mary._2, alex._2 + 1)
-      } )*/
-  println("connected components count: " + ccCount) //237155 
+  println("connected components count: " + ccCount) //24 
   //println("size of connected components: " +ccCouple._1 / ccCouple._2) 
 
   println("/*---------------------(ﾉ ｡◕‿‿◕｡)ﾉ*:･ﾟ✧ ✧ﾟ･-------------*/")
@@ -69,7 +66,7 @@ object SparkGraphX extends App {
   }
 
   def parseData(nodes: Array[Array[DescriptorNode]]): (Array[(Long, DescriptorNode)], Array[Edge[Unit]]) = {
-    val nodesFlat = nodes.flatten.zipWithIndex.map { case (n, i) => i.toLong -> n }
+    val nodesFlat = nodes.flatten.distinct.zipWithIndex.map { case (n, i) => i.toLong -> n }
     val indexMap = nodesFlat.map { case (i, n) => n.name -> i }.toMap
 
     val edges = nodes.flatMap { citation =>
