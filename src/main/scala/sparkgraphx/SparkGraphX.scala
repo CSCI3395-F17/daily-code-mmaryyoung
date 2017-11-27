@@ -41,7 +41,11 @@ object SparkGraphX extends App {
   cc.groupBy(_._2).mapValues(_.toSeq.length).take(10) foreach println
   
   println("connected components count: " + ccCount) //24 
-  //println("size of connected components: " +ccCouple._1 / ccCouple._2) 
+
+  val ranks = graph.pageRank(0.00001)
+  val ranked = nodesRDD.join(ranks.vertices).sortBy(_._2._2)
+
+  ranked.take(10) foreach println
 
   println("/*---------------------(ﾉ ｡◕‿‿◕｡)ﾉ*:･ﾟ✧ ✧ﾟ･-------------*/")
   sc.stop()
