@@ -53,12 +53,16 @@ object Clustering extends App {
   val blsData = electionData.join(laCombined, concat(electionData("county_name"), lit(", "), electionData("state_abbr")) === laCombined("area_text")).drop('area_text).drop('area_code).drop('_c0)
 
 
-  val joinedAll = mainData.join(blsData, mainData("area_fips").cast("Int") === blsData("combined_fips").cast("Int"))
+  val joinedAll = mainData.filter('industry_code === "10"&& 'own_code === "2" && 'qtr === "1").join(blsData, mainData("area_fips").cast("Int") === blsData("combined_fips").cast("Int"))
 
   var columnsToKeep = "total_qtrly_wages taxable_qtrly_wages taxable_qtrly_wages taxable_qtrly_wages oty_qtrly_estabs_chg oty_qtrly_estabs_pct_chg oty_total_qtrly_wages_chg oty_total_qtrly_wages_pct_chg oty_taxable_qtrly_wages_chg oty_taxable_qtrly_wages_pct_chg oty_qtrly_contributions_chg oty_qtrly_contributions_pct_chg oty_avg_wkly_wage_chg oty_avg_wkly_wage_pct_chg labor unemploy".split(" ")
-  val typedData = columnsToKeep.foldLeft(joinedAll)((df, colName) => df.withColumn(colName, df(colName).cast(DoubleType).as(colName))).na.drop().groupBy('area_fips).avg()
-  println("all")
-  columnsToKeep = columnsToKeep.map(x => "avg(" + x + ")")
+  
+  
+  println("before groupby: ")
+  var typedData = columnsToKeep.foldLeft(joinedAll)((df, colName) => df.withColumn(colName, df(colName).cast(DoubleType).as(colName))).na.drop()
+  //typedData = typedData.groupBy('area_fips).avg()
+  //columnsToKeep = Array("avg(total_qtrly_wages)","avg(taxable_qtrly_wages)","avg(taxable_qtrly_wages)","avg(taxable_qtrly_wages)","avg(oty_qtrly_estabs_chg)","avg(oty_qtrly_estabs_pct_chg)","avg(oty_total_qtrly_wages_chg)","avg(oty_total_qtrly_wages_pct_chg)","avg(oty_taxable_qtrly_wages_chg)","avg(oty_taxable_qtrly_wages_pct_chg)","avg(oty_qtrly_contributions_chg)","avg(oty_qtrly_contributions_pct_chg)","avg(oty_avg_wkly_wage_chg)","avg(oty_avg_wkly_wage_pct_chg)","avg(labor)","avg(unemploy)")
+  //println(columnsToKeep)
   val assembler = new VectorAssembler().setInputCols(columnsToKeep).setOutputCol("features")
  
   val dataWithFeatures = assembler.transform(typedData)
@@ -67,7 +71,7 @@ object Clustering extends App {
   val normalizer = new Normalizer().setInputCol("features").setOutputCol("normFeatures")
   val normData = normalizer.transform(dataWithFeatures)
 
-  val kmeans = new KMeans().setK(3).setFeaturesCol("normFeatures")
+  val kmeans = new KMeans().setK(2).setFeaturesCol("normFeatures")
   val model = kmeans.fit(normData)
 
   val cost = model.computeCost(normData)
@@ -75,44 +79,20 @@ object Clustering extends App {
   println("cost distance = " + math.sqrt(cost / normData.count()))
 
   val predictions = model.transform(normData)
-  //predictions.select("features", "prediction").show()
+  predictions.select("features", "prediction").show()
 
+  val check = predictions.groupBy('prediction).agg(avg('per_dem), stddev('per_dem), avg('per_gop), stddev('per_gop))
+  check.show()
   
-  
-
-  
-  
-  
-  
-  
-  
-  /*val stations = spark.read.textFile("../data/NOAA/ghcnd-stations.txt").map { line =>
-    val id = line.substring(0, 11)
-    val lat = line.substring(12, 20).trim.toDouble
-    val lon = line.substring(21, 30).trim.toDouble
-    val elev = line.substring(31, 37).trim.toDouble
-    val name = line.substring(41, 71).trim
-    Station(id, lat, lon, elev, name)
-  }.cache()
-  
-  val stationVA = new VectorAssembler().setInputCols(Array("lat","lon")).setOutputCol("location")
-  val stationsWithVect = stationVA.transform(stations) 
-
-  val kMeans = new KMeans().setK(2000).setFeaturesCol("location")
-  val stationClusterModel = kMeans.fit(stationsWithVect)
-  
-  val stationsWithClusters = stationClusterModel.transform(stationsWithVect)
-  stationsWithClusters.show
-  
-  val x = stationsWithClusters.select('lon).as[Double].collect()
-  val y = stationsWithClusters.select('lat).as[Double].collect()
-  val predict = stationsWithClusters.select('prediction).as[Double].collect()
-  val cg = ColorGradient(0.0 -> BlueARGB, 1000.0 -> RedARGB, 2000.0 -> GreenARGB)
-  val plot = Plot.scatterPlot(x, y, "Station Clusters", "Longitude", "Latitude", 3, predict.map(cg))
-  
-  FXRenderer(plot)
-  * 
-  */
-  
-  spark.stop()
+  val total_cluster0 = predictions.filter('prediction === 0).count()
+  println("cluster 0 dem: " + 1.0*predictions.filter('prediction === 0 && 'per_dem.cast("Double") > 0.5).count()/total_cluster0)
+  println("cluster 0 gop: " + 1.0*predictions.filter('prediction === 0 && 'per_gop.cast("Double") > 0.5).count()/total_cluster0)
+  val total_cluster1 = predictions.filter('prediction === 1).count()
+  println("cluster 1 dem: " + 1.0*predictions.filter('prediction === 1 && 'per_dem.cast("Double") > 0.5).count()/total_cluster1)
+  println("cluster 1 gop: " + 1.0*predictions.filter('prediction === 1 && 'per_gop.cast("Double") > 0.5).count()/total_cluster1)
+  /*val total_cluster2 = predictions.filter('prediction === 2).count()
+  println("cluster 2 dem: " + 1.0*predictions.filter('prediction === 2 && 'per_dem.cast("Double") > 0.3).count()/total_cluster2)
+  println("cluster 2 gop: " + 1.0*predictions.filter('prediction === 2 && 'per_gop.cast("Double") > 0.3).count()/total_cluster2)
+ */
+ spark.stop()
 }
