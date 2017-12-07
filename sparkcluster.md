@@ -2,27 +2,23 @@ The columns I used to cluster: total_qtrly_wages taxable_qtrly_wages taxable_qtr
 
 1. Two cluster result: total cost 0.045, cost distance 0.004
 
-+----------+-------------------+--------------------+------------------+--------------------+
-|prediction|       avg(per_dem)|stddev_samp(per_dem)|      avg(per_gop)|stddev_samp(per_gop)|
-+----------+-------------------+--------------------+------------------+--------------------+
-|         1|    0.3845301690565| 0.23831380731737478|    0.549653181839|  0.2583720945136875|
-|         0|0.31731623764103645|  0.1667422783676822|0.6295181835524905| 0.17239168671226704|
-+----------+-------------------+--------------------+------------------+--------------------+
+**prediction**|** avg(per\_dem)**|**stddev\_samp(per\_dem)**|**avg(per\_gop)**|**stddev\_samp(per\_gop)**
+:-----:|:-----:|:-----:|:-----:|:-----:
+1|0.38|0.24|0.55|0.26
+0|0.32|0.17|0.63|0.17
 
-cluster 0 dem: 0.13688212927756654
-cluster 0 gop: 0.7680608365019012
+cluster 0 dem: 0.14
+cluster 0 gop: 0.77
 cluster 1 dem: 0.5
 cluster 1 gop: 0.5
 
-Three cluster result: total cost 0.024, cost distanct 0.003
+Three cluster result: total cost 0.024, cost distance 0.003
 
-+----------+------------------+--------------------+------------------+--------------------+
-|prediction|      avg(per_dem)|stddev_samp(per_dem)|      avg(per_gop)|stddev_samp(per_gop)|
-+----------+------------------+--------------------+------------------+--------------------+
-|         1|   0.3845301690565| 0.23831380731737478|    0.549653181839|  0.2583720945136875|
-|         2|  0.06651664647832|  0.0316565583466347|0.8960075409957999|0.049424028844921176|
-|         0|0.3221766948341124|  0.1645625845583604|0.6243536611214185| 0.16985476581333828|
-+----------+------------------+--------------------+------------------+--------------------+
+**prediction**|** avg(per\_dem)**|**stddev\_samp(per\_dem)**|**avg(per\_gop)**|**stddev\_samp(per\_gop)**
+:-----:|:-----:|:-----:|:-----:|:-----:
+1|0.3845301691|0.2383138073|0.5496531818|0.2583720945
+2|0.06651664648|0.03165655835|0.6295181836|0.1723916867
+0|0.3221766948|0.1645625846|0.6243536611|0.1698547658
 
 cluster 0 dem: 0.49612403100775193
 cluster 0 gop: 0.9534883720930233
@@ -36,3 +32,32 @@ dem: a county with more than 30% dem
 gop: a county with more than 30% gop
 
 It appears that the republicans are everywhere ¯\_(ツ)_/¯
+
+ORRRRRRR
+My results improved when I got rid of all the new totally wages data and stuff, especially for two clusters. 
+1. Two cluster result: total cost 0.002, cost distance 0.003
+
+**prediction**|** avg(per\_dem)**|**stddev\_samp(per\_dem)**|**avg(per\_gop)**|**stddev\_samp(per\_gop)**
+:-----:|:-----:|:-----:|:-----:|:-----:
+1|0.57|NaN|0.43|NaN
+0|0.32|0.17|0.63|0.17
+
+cluster 0 dem: 0.13688212927756654
+cluster 0 gop: 0.7680608365019012
+cluster 1 dem: 1.0
+cluster 1 gop: 0.0
+
+2. Three cluster result: total cost 9.17e-4 cost distance 0.002
+**prediction**|** avg(per\_dem)**|**stddev\_samp(per\_dem)**|**avg(per\_gop)**|**stddev\_samp(per\_gop)**
+:-----:|:-----:|:-----:|:-----:|:-----:
+1|0.33|0.15|0.61|0.16
+2|0.22|0.23|0.74|0.24
+0|0.25|0.20|0.70|0.19
+
+cluster 0 dem: 0.11
+cluster 0 gop: 0.86
+cluster 1 dem: 0.14
+cluster 1 gop: 0.75
+cluster 2 dem: 0.29
+cluster 2 gop: 1.0
+
