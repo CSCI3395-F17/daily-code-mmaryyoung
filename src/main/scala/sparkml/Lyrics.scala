@@ -48,7 +48,7 @@ implicit class OpsNum(val str: String) extends AnyVal {
   }}
 
   val modeUDF = udf{s: Seq[String] => {
-      s.groupBy(i=>i).mapValues(_.size).toSeq.sortBy(_._2).slice(0, 5) 
+      s.groupBy(i=>i).mapValues(_.size).toSeq.sortBy(_._2 * (-1)).slice(0, 5) 
   }}
 
   val spark = SparkSession.builder.appName("Lyrics").master("local[*]").getOrCreate()

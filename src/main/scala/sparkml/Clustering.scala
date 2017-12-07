@@ -14,7 +14,7 @@ import org.apache.spark.sql.types._
 case class NOAAData(sid: String, date: java.sql.Date, measure: String, value: Double)
 case class Station(sid: String, lat: Double, lon: Double, elev: Double, name: String)
 
-object Clustering extends App {
+object Clustering extends JFXApp {
   val spark = SparkSession.builder.appName("NOAA SQL Data").master("local[*]").getOrCreate()
   import spark.implicits._
 
@@ -109,11 +109,11 @@ object Clustering extends App {
   val mapTable = smallPrd.join(zipData, countyUDF(smallPrd("county_name")) === zipData("county") && smallPrd("state_abbr") === zipData("state")).withColumn("accuracy", accUDF('prediction, 'per_dem, 'per_gop))
   mapTable.show()
  
- val lati = mapTable.select('latitude).rdd.map(x => x(0).asInstanceOf[Double]).collect()
- val longi = mapTable.select('longitude).rdd.map(x => x(0).asInstanceOf[Double]).collect()
+ val lati = mapTable.select('latitude).rdd.map(x => x(0).asInstanceOf[String].toDouble).collect()
+ val longi = mapTable.select('longitude).rdd.map(x => x(0).asInstanceOf[String].toDouble).collect()
  val accu = mapTable.select('accuracy).rdd.map(x => x(0).asInstanceOf[Double])collect()
- val plot = Plot.scatterPlot(longi, lati, "Election Prediction", "Longitude", "Latitude", 3, accu.map(cg))
-
+ val plot = Plot.scatterPlot(longi, lati, "Election Prediction", "Longitude", "Latitude", 8, accu.map(cg))
+ FXRenderer(plot)
 
  spark.stop()
 }

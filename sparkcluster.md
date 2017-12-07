@@ -80,3 +80,7 @@ cluster 2 dem: 0.29
 
 cluster 2 gop: 1.0
 
+2. ![Election Result](./plots/electionPrediction.png)
+
+Green dots are correct prediction and red dots are incorrect. The predictions are from the two-cluster result with only two feature columns: labor and unemployment.
+
