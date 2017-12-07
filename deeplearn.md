@@ -19,6 +19,7 @@ Recall | 0.3283
 F1 Score | 0.5366	(2 classes excluded from average)
 
 batch size: 500 training ratio: 0.65
+
 Number of classes | 2  
 :-----:|:-----:
 Accuracy |0.8229
@@ -27,6 +28,7 @@ Recall |0.6777
 F1 Score |0.8920
 
 batch size: 500 training ratio: 0.80
+
 Number of classes | 2 
 :-----:|:-----: 
 Accuracy | 0.8300 
